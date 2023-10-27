@@ -4,14 +4,16 @@ import scala.util.Random
 class GameLogic {
   val WIDTH = 1000
   val HEIGHT = 800
+  var mouse : (Float, Float) = (0,0)
 
-  var segList : List[Segments] = List( Head(300,200,0,50))
-  for (i <- 0 until 2) addSeg()
+  var segList : List[Segments] = List( Head(300,200,0,20))
+  for (i <- 0 until 20) addSeg()
+  def addSeg() = segList = segList :+ Head(300,200,0,20)
 
-  def addSeg() = segList = segList :+ Body(300,200,0,50)
+  def step(newMouse : PVector): Unit = {
+    mouse = (newMouse.x, newMouse.y)
 
-  def step(mouse : PVector): Unit = {
-    segList.head.follow(mouse)
+    segList.head.follow(newMouse)
     for (i <- 1 until segList.length) {
       segList(i).follow(segList(i - 1).a)
     }
@@ -35,5 +37,20 @@ class GameLogic {
     }
     else current
   }
+
+
+
+
+
 }
 
+/*TODO
+add sprite
+add centipede behaviour NEXT
+add slowed mouse follow using point MAIN
+add growth
+add centipede class
+main
+mini
+
+ */

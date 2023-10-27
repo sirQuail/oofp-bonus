@@ -1,5 +1,6 @@
 import processing.core.PApplet._
-import processing.core.PVector
+import processing.core.{PApplet, PVector}
+
 import scala.util.Random
 
 abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float) {
@@ -29,8 +30,13 @@ abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float
 
 case class Head(x : Float, y : Float, startAngle : Float, length : Float) extends Segments(x,y,startAngle,length) {
   def changeA(pVec: PVector) : Unit = a = pVec
+
+  def closeToMouse(pVector : PVector, range : Float) : Boolean = { //TODO rename and this is still a bit jumpy, use point
+    val distance = PApplet.dist(b.x,b.y,pVector.x, pVector.y)
+    distance <= range
+  }
 }
 
 case class Body(x : Float, y : Float, startAngle : Float, length : Float) extends Segments(x,y,startAngle,length) {
-  def changeA(pVec : PVector) : Unit = a.lerp(pVec, 0.5.toFloat)
+  def changeA(pVec : PVector) : Unit = a.lerp(pVec, 0.35.toFloat)
 }
