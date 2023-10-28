@@ -16,7 +16,7 @@ abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float
   }
 
   def updateSeg(): Unit = CalcB()
-  def boundTo(follower : Follower) : Unit = this.follow(follower.position)
+  def boundTo(follower : Followers) : Unit = this.follow(follower.position)
   def follow(target: PVector) : Unit = {
     val direction: PVector = PVector.sub(target, a)
     angle = direction.heading()
@@ -37,9 +37,19 @@ case class Body(x : Float = 0, y : Float = 0, startAngle : Float = 0, length : F
   def changeA(pVec : PVector) : Unit = a.lerp(pVec, 0.35.toFloat)
 }
 
-class Follower(var x : Float, var y : Float) {
+case class Carpace(x : Float = 0, y : Float = 0, startAngle : Float = 0, length : Float) extends Segments(x,y,startAngle,length){
+  def changeA(pVec : PVector) : Unit = a.lerp(pVec, 0.35.toFloat)
+
+  //four new points left knee left leg right knee right leg
+  var midPoint: PVector = new PVector((a.x+b.x) / 2, (a.y+b.y) / 2)
+}
+
+abstract class Followers(var x : Float, var y : Float) {
   var position : PVector = new PVector(x,y)
-  val speed = 8
+  def follow(target : PVector): Unit
+}
+//For head usually
+class ConstantFollower(x : Float, y : Float, speed : Int) extends Followers(x,y){
 
   def follow(target : PVector) : Unit = {
     val direction = PVector.sub(target, position)
@@ -51,8 +61,13 @@ class Follower(var x : Float, var y : Float) {
     position.y += direction.y
   }
 
-  def closeTo(pVector: PVector, range: Float): Boolean = { //TODO rename and this is still a bit jumpy, use point
+  private def closeTo(pVector: PVector, range: Float): Boolean = { //TODO rename and this is still a bit jumpy, use point
     val distance = PApplet.dist(position.x, position.y, pVector.x, pVector.y)
     distance <= range
   }
 }
+
+class TeleportFollower(x : Float, y : Float) extends Followers(x,y){
+  def follow(target : PVector): Unit = {position = target}
+}
+
