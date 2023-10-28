@@ -21,12 +21,8 @@ class GameBase extends PApplet {
     //clear
     background(255)
 
-    //draw point
-    strokeWeight(8)
-    point(gameLogic.mouseFollower.position.x,gameLogic.mouseFollower.position.y)
     //draw seg
-    drawSegments(gameLogic.segList)
-
+    drawSegments(gameLogic.mouseCenti.segList)
   }
 
   private def drawSegments(segList : List[Segments]): Unit = {
