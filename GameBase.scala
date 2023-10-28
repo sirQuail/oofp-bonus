@@ -29,6 +29,10 @@ class GameBase extends PApplet {
     }
     //draw seg
     drawSegments(gameLogic.mouseCenti.segList)
+    for (el <- gameLogic.mouseCenti.legList) {
+      drawSegments(el.head.segList)
+      drawSegments(el.last.segList)
+    }
     //drawSegments(gameLogic.mouseCenti.legsList)
   }
 

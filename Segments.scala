@@ -15,6 +15,7 @@ abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float
     b.set(a.x + dx, a.y + dy)
   }
 
+  def getMid: PVector = new PVector((a.x + b.x) / 2, (a.y + b.y) / 2)
   def updateSeg(): Unit = CalcB()
   def boundTo(follower : Followers) : Unit = this.follow(follower.position)
   def follow(target: PVector) : Unit = {

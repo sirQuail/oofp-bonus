@@ -18,7 +18,7 @@ abstract class Rope(bodySize : Int, bodyLength : Int, follows : Followers) {
 case class Centipede(bodySize : Int, bodyLength : Int = 50, follows : Followers) extends Rope(bodySize,bodyLength,follows) {
   //will have legs
   // will have behaviour?
-  var legs : List[FixedRope] = List()
+  var legList : List[List[FixedRope]] = List()
   var segmentFollowers : List[List[SegmentFollower]] = List()
 
   override def move(): Unit = {
@@ -26,6 +26,7 @@ case class Centipede(bodySize : Int, bodyLength : Int = 50, follows : Followers)
     for (i <- 1 until segList.length) {
       segList(i).follow(segList(i - 1).a)
     }
+    updateFollowers()
     updateLegs()
   }
 
@@ -33,16 +34,27 @@ case class Centipede(bodySize : Int, bodyLength : Int = 50, follows : Followers)
     val newSeg = Body(length = bodyLength)
     segList = segList :+ newSeg
     segmentFollowers = segmentFollowers :+ List(new SegmentFollower(1), new SegmentFollower(-1))
-    //val fixedPoint = new PVector((newSeg.b.x - newSeg.a.x)/2,(newSeg.b.y - newSeg.a.y)/2)
-    //legs = legs :+ new FixedRope(follows = new SegmentFollower( segList.last), fixedTo = fixedPoint)
+
+    legList = legList :+ List(FixedRope(follows = segmentFollowers.last.head, fixedTo = newSeg.getMid),
+      FixedRope(follows = segmentFollowers.last.last, fixedTo = newSeg.getMid))
+  }
+
+  def updateFollowers(): Unit = {
+    for (i <- 1 until segList.length) {
+      val currentSegment = segList(i)
+      val follower = segmentFollowers(i - 1)
+      follower.head.follow(currentSegment)
+      follower.last.follow(currentSegment)
+    }
   }
 
   def updateLegs(): Unit = {
     for (i <- 1 until segList.length) {
       val currentSegment = segList(i)
-      val legs = segmentFollowers(i - 1)
-      legs.head.follow(currentSegment)
-      legs.last.follow(currentSegment)
+      for (fixedRope <- legList(i - 1)) {
+        fixedRope.updateFixed(currentSegment.getMid)
+        fixedRope.move()
+      }
     }
   }
 }
@@ -52,7 +64,7 @@ case class Snake(bodySize : Int, bodyLength : Int = 50, follows : Followers) ext
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength)
 }
 
-case class FixedRope(bodySize : Int = 1, bodyLength : Int = 50, follows : Followers, fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
+case class FixedRope(bodySize : Int = 1, bodyLength : Int = 50, follows : Followers,var fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength) //no need for delay
   override def move(): Unit = {
     segList.head.boundTo(follows)
@@ -69,4 +81,7 @@ case class FixedRope(bodySize : Int = 1, bodyLength : Int = 50, follows : Follow
     }
   }
 
+  def updateFixed(newAnchor : PVector) : Unit = {
+    fixedTo = newAnchor
+  }
 }
