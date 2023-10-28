@@ -6,14 +6,18 @@ class GameLogic {
   val HEIGHT = 900
   //var mouse : (Float, Float) = (0,0)
 
-  val mouseFollower : TeleportFollower = new TeleportFollower(0,0)
-  //var mouseCenti : Centipede = new Centipede(9, 30, mouseFollower)
-  var mouseCenti : FixedRope = new FixedRope(1,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
+  val mouseFollower : Followers = new ConstantFollower(0,0,2)
+  var mouseCenti : Rope = new Centipede(1, 50, mouseFollower)
+  //var mouseCenti : FixedRope = new FixedRope(20,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
+  var legfollower: SegmentFollower = new SegmentFollower(0, 0, mouseCenti.segList.head, 1)
+  var legfollower2: SegmentFollower = new SegmentFollower(0, 0, mouseCenti.segList.head, -1)
 
   def step(newMouse : PVector): Unit = {
     //mouse = (newMouse.x, newMouse.y)
 
     mouseFollower.follow(newMouse)
+    legfollower.update(mouseCenti.segList.head)
+    legfollower2.update(mouseCenti.segList.head)
     mouseCenti.move()
   }
 
