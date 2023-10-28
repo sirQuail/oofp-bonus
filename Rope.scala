@@ -2,8 +2,8 @@ import processing.core.PVector
 
 abstract class Rope(bodySize : Int, bodyLength : Int, follows : Followers) {
   var segList: List[Segments] = List(Head(length = bodyLength))
-  var legsList : List[Segments] = List()
-  for (i <- 0 until bodySize) addSeg()
+  //var segmentFollowers : List[List[SegmentFollower]] = List() // TODO move to centipede
+  def initRope() :Unit = for (_ <- 0 until bodySize) addSeg()
 
   def addSeg() : Unit
   def move(): Unit = {
@@ -17,19 +17,33 @@ abstract class Rope(bodySize : Int, bodyLength : Int, follows : Followers) {
 //Segments delay for a more realistic representation
 case class Centipede(bodySize : Int, bodyLength : Int = 50, follows : Followers) extends Rope(bodySize,bodyLength,follows) {
   //will have legs
-  // will have behaviour
-  //var legs : List[FixedRope] = List()
+  // will have behaviour?
+  var legs : List[FixedRope] = List()
+  var segmentFollowers : List[List[SegmentFollower]] = List()
 
+  override def move(): Unit = {
+    segList.head.boundTo(follows)
+    for (i <- 1 until segList.length) {
+      segList(i).follow(segList(i - 1).a)
+    }
+    updateLegs()
+  }
 
   def addSeg(): Unit = {
     val newSeg = Body(length = bodyLength)
     segList = segList :+ newSeg
+    segmentFollowers = segmentFollowers :+ List(new SegmentFollower(1), new SegmentFollower(-1))
     //val fixedPoint = new PVector((newSeg.b.x - newSeg.a.x)/2,(newSeg.b.y - newSeg.a.y)/2)
-    //legs = legs :+ new FixedRope(follows = new SegmentFollower(0,0, segList.last), fixedTo = fixedPoint)
+    //legs = legs :+ new FixedRope(follows = new SegmentFollower( segList.last), fixedTo = fixedPoint)
   }
 
   def updateLegs(): Unit = {
-
+    for (i <- 1 until segList.length) {
+      val currentSegment = segList(i)
+      val legs = segmentFollowers(i - 1)
+      legs.head.follow(currentSegment)
+      legs.last.follow(currentSegment)
+    }
   }
 }
 

@@ -22,11 +22,14 @@ class GameBase extends PApplet {
     background(255)
 
     strokeWeight(8)
-    point(gameLogic.legfollower.position.x,gameLogic.legfollower.position.y)
-    point(gameLogic.legfollower2.position.x,gameLogic.legfollower2.position.y)
+
+    for (el <- gameLogic.mouseCenti.segmentFollowers){
+      point(el.head.position.x,el.head.position.y)
+      point(el.last.position.x,el.last.position.y)
+    }
     //draw seg
     drawSegments(gameLogic.mouseCenti.segList)
-    drawSegments(gameLogic.mouseCenti.legsList)
+    //drawSegments(gameLogic.mouseCenti.legsList)
   }
 
   private def drawSegments(segList : List[Segments]): Unit = {
