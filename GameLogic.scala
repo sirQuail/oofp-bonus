@@ -6,16 +6,20 @@ class GameLogic {
   val HEIGHT = 800
   var mouse : (Float, Float) = (0,0)
 
-  var segList : List[Segments] = List( Head(300,200,0,20))
-  for (i <- 0 until 20) addSeg()
-  def addSeg() = segList = segList :+ Head(300,200,0,20)
+  val mouseFollower : Follower = new Follower(0,0)
+
+  var segList : List[Segments] = List( Head(length = 50))
+  for (i <- 0 until 10) addSeg()
+  def addSeg() = segList = segList :+ Body(length = 50)
 
   def step(newMouse : PVector): Unit = {
     mouse = (newMouse.x, newMouse.y)
 
-    segList.head.follow(newMouse)
+    mouseFollower.follow(newMouse)
+
+    segList.head.boundTo(mouseFollower)//find a different way to do the following be more clear
     for (i <- 1 until segList.length) {
-      segList(i).follow(segList(i - 1).a)
+      segList(i).follow(segList(i - 1).a) //maybe turn this to inside class thing where each segment knows nextseg. Why? less step dirtiness
     }
   }
 
@@ -37,19 +41,15 @@ class GameLogic {
     }
     else current
   }
-
-
-
-
-
 }
 
 /*TODO
 add sprite
-add centipede behaviour NEXT
-add slowed mouse follow using point MAIN
+add centipede behaviour
+add slowed mouse follow using point DONE! bug: head jiggles sometimes if close to mouse
 add growth
-add centipede class
+add centipede class NEXT
+add legs
 main
 mini
 

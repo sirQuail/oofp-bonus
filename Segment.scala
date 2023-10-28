@@ -16,6 +16,7 @@ abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float
   }
 
   def updateSeg(): Unit = CalcB()
+  def boundTo(follower : Follower) : Unit = this.follow(follower.position)
   def follow(target: PVector) : Unit = {
     val direction: PVector = PVector.sub(target, a)
     angle = direction.heading()
@@ -28,15 +29,30 @@ abstract class Segments(x : Float, y : Float, startAngle : Float, length : Float
   def changeA(pVec : PVector) : Unit
 }
 
-case class Head(x : Float, y : Float, startAngle : Float, length : Float) extends Segments(x,y,startAngle,length) {
+case class Head(x : Float = 0, y : Float = 0, startAngle : Float = 0, length : Float) extends Segments(x,y,startAngle,length) {
   def changeA(pVec: PVector) : Unit = a = pVec
-
-  def closeToMouse(pVector : PVector, range : Float) : Boolean = { //TODO rename and this is still a bit jumpy, use point
-    val distance = PApplet.dist(b.x,b.y,pVector.x, pVector.y)
-    distance <= range
-  }
 }
 
-case class Body(x : Float, y : Float, startAngle : Float, length : Float) extends Segments(x,y,startAngle,length) {
+case class Body(x : Float = 0, y : Float = 0, startAngle : Float = 0, length : Float) extends Segments(x,y,startAngle,length) {
   def changeA(pVec : PVector) : Unit = a.lerp(pVec, 0.35.toFloat)
+}
+
+class Follower(var x : Float, var y : Float) {
+  var position : PVector = new PVector(x,y)
+  val speed = 8
+
+  def follow(target : PVector) : Unit = {
+    val direction = PVector.sub(target, position)
+    direction.normalize()
+    direction.mult(speed)
+
+    if (!closeTo(target, 14))
+      position.x += direction.x
+    position.y += direction.y
+  }
+
+  def closeTo(pVector: PVector, range: Float): Boolean = { //TODO rename and this is still a bit jumpy, use point
+    val distance = PApplet.dist(position.x, position.y, pVector.x, pVector.y)
+    distance <= range
+  }
 }
