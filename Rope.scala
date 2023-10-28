@@ -37,6 +37,8 @@ case class Centipede(bodySize : Int, bodyLength : Int = 50, follows : Followers)
 
     legList = legList :+ List(FixedRope(follows = segmentFollowers.last.head, fixedTo = newSeg.getMid),
       FixedRope(follows = segmentFollowers.last.last, fixedTo = newSeg.getMid))
+    legList.last.head.initRope()
+    legList.last.last.initRope()
   }
 
   def updateFollowers(): Unit = {
@@ -64,20 +66,18 @@ case class Snake(bodySize : Int, bodyLength : Int = 50, follows : Followers) ext
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength)
 }
 
-case class FixedRope(bodySize : Int = 1, bodyLength : Int = 50, follows : Followers,var fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
+case class FixedRope(bodySize : Int = 1, bodyLength : Int = 20, follows : Followers,var fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength) //no need for delay
   override def move(): Unit = {
     segList.head.boundTo(follows)
 
     for (i <- 1 until segList.length) {
       segList(i).follow(segList(i - 1).a)
-      //segList(i).updateSeg()
     }
     segList.last.a = fixedTo
 
     for (i <- 0 until segList.length - 1) { //TODO issue where the segments arent moving in a fixed manner
       segList(i).a = segList(i + 1).b
-      //segList(i).updateSeg()
     }
   }
 

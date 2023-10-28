@@ -7,7 +7,7 @@ class GameLogic {
   //var mouse : (Float, Float) = (0,0)
 
   val mouseFollower : Followers = new ConstantFollower(8)
-  var mouseCenti : Centipede = Centipede(3, 50, mouseFollower)
+  var mouseCenti : Centipede = Centipede(10, 50, mouseFollower)
   mouseCenti.initRope()
   //var mouseCenti : FixedRope = new FixedRope(20,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
 
