@@ -17,6 +17,6 @@ To run:
 -Make sure you have all the files in the project and have processing library.
 -Run GameLogic.scala, you may switch between the commented code to see different types.
 
--Feel free to make your own creature with certain length, size, and color. Maybe even mess with the other files
--You can also change the default constructors for FixedRope in RopeCreatue.scala to see what happens when you edit amount of joints or leg size
--You can edit the thickness of the sticks with strokeWeight found in GameBase.scala
+-Feel free to make your own creature with certain length, size, and color. Maybe even mess with the other files.
+-You can also change the default constructors for FixedRope in RopeCreatue.scala to see what happens when you edit amount of joints or leg size.
+-You can edit the thickness of the sticks with strokeWeight found in GameBase.scala.
