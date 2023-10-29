@@ -1,4 +1,5 @@
 # oofp-bonus
+Requires Proccessing library
  
 Creatures that are procedurally animated using inverse kinematics.
 This topic is very interesting to me so I made this demonstration of different skeletons that move "realistically"
