@@ -2,7 +2,6 @@ import processing.core.PVector
 
 abstract class Rope(bodySize : Int, bodyLength : Int, follows : Followers) {
   var segList: List[Segments] = List(Head(length = bodyLength))
-  //var segmentFollowers : List[List[SegmentFollower]] = List() // TODO move to centipede
   def initRope() :Unit = for (_ <- 0 until bodySize) addSeg()
 
   def addSeg() : Unit
@@ -66,7 +65,7 @@ case class Snake(bodySize : Int, bodyLength : Int = 50, follows : Followers) ext
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength)
 }
 
-case class FixedRope(bodySize : Int = 1, bodyLength : Int = 20, follows : Followers,var fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
+case class FixedRope(bodySize : Int = 3, bodyLength : Int = 25, follows : Followers,var fixedTo : PVector) extends Rope(bodySize,bodyLength,follows) {
   def addSeg(): Unit = segList = segList :+ Head(length = bodyLength) //no need for delay
   override def move(): Unit = {
     segList.head.boundTo(follows)

@@ -19,27 +19,34 @@ class GameBase extends PApplet {
       updateTimer.advanceFrame()
     }
     //clear
-    background(255)
+    background(0)
 
     strokeWeight(8)
 
-    for (el <- gameLogic.mouseCenti.segmentFollowers){
-      point(el.head.position.x,el.head.position.y)
-      point(el.last.position.x,el.last.position.y)
-    }
+
     //draw seg
     drawSegments(gameLogic.mouseCenti.segList)
+    drawLegs()
+    drawPoints()
+    //drawSegments(gameLogic.mouseCenti.legsList)
+  }
+  def drawLegs(): Unit = {
     for (el <- gameLogic.mouseCenti.legList) {
       drawSegments(el.head.segList)
       drawSegments(el.last.segList)
     }
-    //drawSegments(gameLogic.mouseCenti.legsList)
   }
-
+  def drawPoints(): Unit = {
+    strokeWeight(10)
+    for (el <- gameLogic.mouseCenti.segmentFollowers) {
+      point(el.head.position.x, el.head.position.y)
+      point(el.last.position.x, el.last.position.y)
+    }
+  }
   private def drawSegments(segList : List[Segments]): Unit = {
-    strokeWeight(5)
+    strokeWeight(6)
     for (seg <- segList) {
-      stroke(seg.rgb._1,seg.rgb._2,seg.rgb._3)
+      stroke(seg.color._1,seg.color._2,seg.color._3)
       seg.updateSeg()
       val a = seg.a
       val b = seg.b

@@ -1,16 +1,16 @@
 import processing.core._
-import scala.util.Random
 
 class GameLogic {
   val WIDTH = 1200
   val HEIGHT = 900
-  //var mouse : (Float, Float) = (0,0)
 
   val mouseFollower : Followers = new ConstantFollower(8)
-  var mouseCenti : Centipede = Centipede(10, 50, mouseFollower)
-  mouseCenti.initRope()
-  //var mouseCenti : FixedRope = new FixedRope(20,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
+  var mouseCenti : Centipede = Centipede(2, 50, mouseFollower)
 
+  //var mouseCenti : FixedRope = new FixedRope(1,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
+  //var mouseCenti : Snake = new Snake(10, follows = mouseFollower)
+
+  mouseCenti.initRope()
   def step(newMouse : PVector): Unit = {
     //mouse = (newMouse.x, newMouse.y)
 
@@ -26,13 +26,10 @@ class GameLogic {
 }
 
 /*TODO
-add sprite
-add centipede behaviour
-add slowed mouse follow using point DONE! bug: head jiggles sometimes if close to mouse
-add growth
-add centipede class IMPLEMENTED
-add legs add fixed Rope
-main
-mini
-
+add sprite CANCELLED
+add centipede behaviour CANCELLED (if anyone is interested, I thought using followers to direct Ropes to a location)
+add Followers DONE! bug: head jiggles sometimes if close to mouse
+add growth CANCELLED
+add centipede class DONE
+add legs DONE
  */
