@@ -1,30 +1,32 @@
 import processing.core._
+/*
+Creatures that are procedurally animated using inverse kinematics.
+This topic is very interesting to me so I made this demonstration of different skeletons that move "realistically"
+ */
 
 class GameLogic {
   val WIDTH = 1200
   val HEIGHT = 900
 
+  //FEEL FREE TO SWITCH BETWEEN COMMENTED CODE TO SEE DIFFERENT BEHAVIOUR
   val mouseFollower : Followers = new ConstantFollower(8)
-  var mouseCenti : Centipede = Centipede(2, 50, mouseFollower)
+  //val mouseFollower : Followers = new TeleportFollower
 
-  //var mouseCenti : FixedRope = new FixedRope(1,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2))
-  //var mouseCenti : Snake = new Snake(10, follows = mouseFollower)
 
-  mouseCenti.initRope()
+  //FEEL FREE TO SWITCH BETWEEN COMMENTED CODE TO SEE DIFFERENT BEHAVIOUR
+  //var mouseRope : Snake = Snake(0, follows = mouseFollower) // STICK
+  //var mouseRope : Snake = Snake(10, follows = mouseFollower, color = (0,255,0)) // SNAKE
+  //var mouseRope : FixedRope = FixedRope(2,50, mouseFollower, new PVector(WIDTH/2,HEIGHT/2)) // ARM. I suggest using TeleportFollower with it
+  //var mouseRope : Centipede = Centipede(2, 50, mouseFollower) // DOG
+  var mouseRope : Centipede = Centipede(15, 50, mouseFollower, color = (255,0,0)) // CENTIPEDE
+
+
+  mouseRope.initRope()
   def step(newMouse : PVector): Unit = {
-    //mouse = (newMouse.x, newMouse.y)
-
     mouseFollower.follow(newMouse)
-    mouseCenti.move()
-  }
-
-  def isPressed(key : Char) = {
-    key match {
-      case _ => key
-    }
+    mouseRope.move()
   }
 }
-
 /*TODO
 add sprite CANCELLED
 add centipede behaviour CANCELLED (if anyone is interested, I thought using followers to direct Ropes to a location)

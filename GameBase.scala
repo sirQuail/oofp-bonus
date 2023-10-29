@@ -1,9 +1,8 @@
 import processing.core.{PApplet, PConstants, PVector}
 
 class GameBase extends PApplet {
-
-  var gameLogic = new GameLogic
-  val updateTimer = new UpdateTimer(60)
+  private val gameLogic = new GameLogic
+  private val updateTimer = new UpdateTimer(60)
 
   override def settings(): Unit = {
     size(gameLogic.WIDTH, gameLogic.HEIGHT)
@@ -21,28 +20,32 @@ class GameBase extends PApplet {
     //clear
     background(0)
 
-    strokeWeight(8)
-
-
-    //draw seg
-    drawSegments(gameLogic.mouseCenti.segList)
-    drawLegs()
-    drawPoints()
-    //drawSegments(gameLogic.mouseCenti.legsList)
+    //draw
+    drawSegments(gameLogic.mouseRope.segList)
+    gameLogic.mouseRope match {
+      case rope : Centipede  =>
+        drawSegmentFollowers(rope)
+        drawLegs(rope)
+      case _ =>
+    }
   }
-  def drawLegs(): Unit = {
-    for (el <- gameLogic.mouseCenti.legList) {
+
+  private def drawLegs(rope : Centipede): Unit = {
+    for (el <- rope.legList) {
       drawSegments(el.head.segList)
       drawSegments(el.last.segList)
     }
   }
-  def drawPoints(): Unit = {
+
+  private def drawSegmentFollowers(rope : Centipede): Unit = {
     strokeWeight(10)
-    for (el <- gameLogic.mouseCenti.segmentFollowers) {
+    stroke(255,0,0)
+    for (el <- rope.segmentFollowers) {
       point(el.head.position.x, el.head.position.y)
       point(el.last.position.x, el.last.position.y)
     }
   }
+
   private def drawSegments(segList : List[Segments]): Unit = {
     strokeWeight(6)
     for (seg <- segList) {
@@ -56,19 +59,13 @@ class GameBase extends PApplet {
     strokeWeight(1)
   }
 
-  override def keyPressed(): Unit = {
-    gameLogic.isPressed(key)
-  }
-
-  class UpdateTimer(val framesPerSecond: Float) {
-
-    private val frameDuration: Float = 1000 / framesPerSecond // ms
+  private class UpdateTimer(val framesPerSecond: Float) {
+    private val frameDuration: Float = 1000 / framesPerSecond
     private var nextFrame: Float = Float.MaxValue
 
     def init(): Unit = nextFrame = currentTime() + frameDuration
     def timeForNextFrame(): Boolean = currentTime() >= nextFrame
     def advanceFrame(): Unit = nextFrame = nextFrame + frameDuration
-
   }
 
   private def currentTime(): Int = millis()

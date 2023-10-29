@@ -1,5 +1,4 @@
 import processing.core.{PApplet, PVector}
-
 /*
 Followers are points that, follow a target.
 I use these to help Rope subclasses move the way I want without dealing without complicating the follow code in Segments.
